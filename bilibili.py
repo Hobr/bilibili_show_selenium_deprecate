@@ -31,7 +31,7 @@ while True:
         continue
 
     try:
-        WebDriver.find_element(By.CLASS_NAME, "ant-checkbox").click()
+        WebDriver.find_element(By.CLASS_NAME, "check-icon").click()
         WebDriver.find_element(By.CLASS_NAME, "confirm-paybtn.active").click()
         print("订单创建完成")
     except:

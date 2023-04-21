@@ -24,7 +24,7 @@ while True:
             print("无票")
             raise
         ticket.click()
-        WebDriver.find_element(By.CLASS_NAME, "sc-idXgbr.bmeITR").click()
+        WebDriver.find_element(By.XPATH, "//*[@id='root']/div/div[2]/div/div/div[1]/div/div[2]/div[2]/button").click()
     except:
         print("无法购买")
         WebDriver.refresh();
@@ -32,7 +32,8 @@ while True:
 
     try:
         WebDriver.find_element(By.CLASS_NAME, "purchaser-info").click()
-        WebDriver.find_element(By.CLASS_NAME, "sc-idXgbr.jfzLdX").click()
+        WebDriver.find_element(By.CLASS_NAME, "ant-checkbox").click()
+        WebDriver.find_element(By.XPATH, "//*[@id='root']/div/div[2]/div/div/button").click()
         print("订单创建完成")
     except:
         print("无法点击创建订单")
