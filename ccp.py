@@ -14,11 +14,11 @@ time.sleep(1)
 for cookie in cookies:
     WebDriver.add_cookie(
     {
-    'domain':cookie['domain'],
-    'name': cookie['name'],
-    'value':cookie['value'],
-    'path': cookie['path']
- }
+        'domain':cookie['domain'],
+        'name': cookie['name'],
+        'value':cookie['value'],
+        'path': cookie['path']
+    }
 )
 WebDriver.refresh()
 time.sleep(1)
