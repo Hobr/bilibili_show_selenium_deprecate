@@ -1,11 +1,9 @@
 from selenium.webdriver.common.by import By
 from selenium import webdriver
 
-# 你的cookie
 cookies = []
 
 WebDriver = webdriver.Chrome()
-# 购票页面
 WebDriver.get("https://cp.allcpp.cn/#/ticket/detail?event=1074")
 print("进入购票页面成功")
 for cookie in cookies:
@@ -21,7 +19,7 @@ WebDriver.get("https://cp.allcpp.cn/#/ticket/detail?event=1074")
 
 while True:
     try:
-        ticket = WebDriver.find_element(By.XPATH, "//*[@id='root']/div/div[2]/div/div/div[1]/div/div[2]/div[1]/div/div[3]")
+        ticket = WebDriver.find_element(By.XPATH, "//*[@id='root']/div/div[2]/div/div/div[1]/div/div[2]/div[1]/div/div[3]") # 最后一项[]对应票的类型
         if ticket.get_attribute('class') == 'ticket-box disabled':
             print("无票")
             raise

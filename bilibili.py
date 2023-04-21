@@ -1,11 +1,9 @@
 from selenium.webdriver.common.by import By
 from selenium import webdriver
 
-# 你的cookie
 cookies = []
 
 WebDriver = webdriver.Chrome()
-# 购票页面
 WebDriver.get("https://show.bilibili.com/platform/detail.html?id=72320")
 print("进入购票页面成功")
 for cookie in cookies:
@@ -21,7 +19,7 @@ WebDriver.refresh()
 
 while True:
     try:
-        ticket = WebDriver.find_element(By.XPATH, "//*[@id='app']/div[2]/div[2]/div[2]/div[4]/ul[1]/li[2]/div[1]")
+        ticket = WebDriver.find_element(By.XPATH, "//*[@id='app']/div[2]/div[2]/div[2]/div[4]/ul[1]/li[2]/div[1]") # 最后一项[]对应票的类型
         if ticket.get_attribute('class') == 'selectable-option unable':
             print("无票")
             raise
