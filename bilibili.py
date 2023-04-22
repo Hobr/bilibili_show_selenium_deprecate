@@ -18,22 +18,22 @@ for cookie in cookies:
 WebDriver.refresh()
 
 while True:
-    try:
-        ticket = WebDriver.find_element(By.XPATH, "//*[@id='app']/div[2]/div[2]/div[2]/div[4]/ul[1]/li[2]/div[1]") # 最后一项[]对应票的类型
-        if ticket.get_attribute('class') == 'selectable-option unable':
-            print("无票")
-            raise
-        ticket.click()
-        WebDriver.find_element(By.CLASS_NAME, "product-buy.enable").click()
-    except:
-        print("无法购买")
-        WebDriver.refresh();
-        continue
-
-    try:
-        WebDriver.find_element(By.CLASS_NAME, "check-icon").click()
-        WebDriver.find_element(By.CLASS_NAME, "confirm-paybtn.active").click()
-        print("订单创建完成")
-    except:
-        print("无法点击创建订单")
-        continue
+    currurl = WebDriver.current_url
+    if  "show.bilibili.com/platform/detail.html" in currurl:
+        try:
+            ticket = WebDriver.find_element(By.XPATH, "//*[@id='app']/div[2]/div[2]/div[2]/div[4]/ul[1]/li[2]/div[1]") # 最后一项[]对应票的类型
+            ticket.click()
+            if ticket.get_attribute('class') == 'selectable-option unable':
+                print("无票")
+                WebDriver.refresh();
+                continue
+            WebDriver.find_element(By.CLASS_NAME, "product-buy.enable").click()
+        except:
+            print("无法购买")
+            WebDriver.refresh();
+    elif "show.bilibili.com/platform/confirmOrder.html" in currurl:
+        try:
+            WebDriver.find_element(By.CLASS_NAME, "confirm-paybtn.active").click()
+            print("下单中")
+        except:
+            print("无法创建订单")

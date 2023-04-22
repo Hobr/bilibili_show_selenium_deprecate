@@ -18,23 +18,23 @@ for cookie in cookies:
 WebDriver.get("https://cp.allcpp.cn/#/ticket/detail?event=1074")
 
 while True:
-    try:
-        ticket = WebDriver.find_element(By.XPATH, "//*[@id='root']/div/div[2]/div/div/div[1]/div/div[2]/div[1]/div/div[3]") # 最后一项[]对应票的类型
-        if ticket.get_attribute('class') == 'ticket-box disabled':
-            print("无票")
-            raise
-        ticket.click()
-        WebDriver.find_element(By.XPATH, "//*[@id='root']/div/div[2]/div/div/div[1]/div/div[2]/div[2]/button").click()
-    except:
-        print("无法购买")
-        WebDriver.refresh();
-        continue
-
-    try:
-        WebDriver.find_element(By.CLASS_NAME, "purchaser-info").click()
-        WebDriver.find_element(By.CLASS_NAME, "ant-checkbox").click()
-        WebDriver.find_element(By.XPATH, "//*[@id='root']/div/div[2]/div/div/button").click()
-        print("订单创建完成")
-    except:
-        print("无法点击创建订单")
-        continue
+    currurl = WebDriver.current_url
+    if  "cp.allcpp.cn/#/ticket/detail" in currurl:
+        try:
+            ticket = WebDriver.find_element(By.XPATH, "//*[@id='root']/div/div[2]/div/div/div[1]/div/div[2]/div[1]/div/div[3]") # 最后一项[]对应票的类型
+            ticket.click()
+            if ticket.get_attribute('class') == 'ticket-box disabled':
+                print("无票")
+                WebDriver.refresh();
+                continue
+            WebDriver.find_element(By.XPATH, "//*[@id='root']/div/div[2]/div/div/div[1]/div/div[2]/div[2]/button").click()
+        except:
+            print("无法购买")
+            WebDriver.refresh();
+    elif "cp.allcpp.cn/#/ticket/confirmOrder" in currurl:
+        try:
+            WebDriver.find_element(By.CLASS_NAME, "purchaser-info").click()
+            WebDriver.find_element(By.XPATH, "//*[@id='root']/div/div[2]/div/div/button").click()
+            print("下单中")
+        except:
+            print("无法点击创建订单")
