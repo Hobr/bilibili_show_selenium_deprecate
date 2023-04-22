@@ -8,10 +8,9 @@ cp29门票购买脚本，支持Bilibili会员购及ALLCPP，修改一下也可�
 
 ## 如何使用
 
-可参考araea总结的[文档](https://www.yuque.com/araea/ghfyg3/zua34rein9plreo3?singleDoc#)
-
 1. 安装selenium
 2. 获取cookie并加入到代码中，获取方法可参考这个[issue](https://github.com/Hobr/comicup29-ticket-buy/issues/1)
 3. 默认是购买Day1普票，可以修改find_element(By.XPATH....div[第几个])，第几个对应网页中的选项顺序
 4. 提前在平台内填写实名信息
-5. 运行对应脚本，开始抢票
+5. 设置config.json文件,是否发送qq邮件以及邮件信息(sender->发件邮箱, password->发件邮箱授权码, receiver->收件邮箱)
+6. 运行对应脚本，开始抢票
