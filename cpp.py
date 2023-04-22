@@ -1,12 +1,36 @@
 from selenium.webdriver.common.by import By
 from selenium import webdriver
+from utils import send_qq_email
+import json
+import random
+import time
 
-cookies = []
+# 加载配置文件
+with open('./config.json', 'r') as f:
+    config = json.load(f)
 
-WebDriver = webdriver.Chrome()
+# 检查cookie
+if len(config["ccp_cookies"]) == 0:
+    print("cookies未设置, 是否进行cookies获取？(手动登录后回到终端按任意键,程序将自动获取cookies)")
+    getcookies = input("输入yes开始获取cookies:")
+    if getcookies == "yes":
+        WebDriver = webdriver.Edge()
+        WebDriver.get("https://cp.allcpp.cn/#/ticket/detail?event=1074")
+        print('=============================================')
+        input("登录完成后请按任意键继续\n")
+        config["ccp_cookies"] = WebDriver.get_cookies()
+        with open('./config.json', 'w') as f:
+            json.dump(config, f, indent=4)
+        print("cookies 保存好啦,在运行一次脚本吧")
+        exit(0)
+    else:
+        print("未输入 yes, 程序结束")
+        exit(1)
+
+WebDriver = webdriver.Edge()
 WebDriver.get("https://cp.allcpp.cn/#/ticket/detail?event=1074")
 print("进入购票页面成功")
-for cookie in cookies:
+for cookie in config["ccp_cookies"]:
     WebDriver.add_cookie(
     {
         'domain':cookie['domain'],
@@ -18,6 +42,7 @@ for cookie in cookies:
 WebDriver.get("https://cp.allcpp.cn/#/ticket/detail?event=1074")
 
 while True:
+    time.sleep(random.uniform(1, 3))
     try:
         ticket = WebDriver.find_element(By.XPATH, "//*[@id='root']/div/div[2]/div/div/div[1]/div/div[2]/div[1]/div/div[3]") # 最后一项[]对应票的类型
         if ticket.get_attribute('class') == 'ticket-box disabled':
@@ -35,6 +60,10 @@ while True:
         WebDriver.find_element(By.CLASS_NAME, "ant-checkbox").click()
         WebDriver.find_element(By.XPATH, "//*[@id='root']/div/div[2]/div/div/button").click()
         print("订单创建完成")
+        if config["send_email"]:
+            email_config = config["qq_email_config"]
+            send_qq_email(email_config["sender"], email_config["password"], email_config["receiver"])
+        exit(0)
     except:
         print("无法点击创建订单")
         continue
