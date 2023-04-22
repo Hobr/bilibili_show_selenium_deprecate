@@ -1,6 +1,6 @@
 from selenium.webdriver.common.by import By
 from selenium import webdriver
-from utils import send_qq_email
+from utils import EmailHelper
 import json
 import random
 import time
@@ -41,6 +41,8 @@ for cookie in config["ccp_cookies"]:
 )
 WebDriver.get("https://cp.allcpp.cn/#/ticket/detail?event=1074")
 
+if config["send_email"]:
+    email_helper = EmailHelper(config["qq_email_config"])
 while True:
     time.sleep(random.uniform(0.1, 1))
     currurl = WebDriver.current_url
@@ -62,8 +64,9 @@ while True:
             WebDriver.find_element(By.XPATH, "//*[@id='root']/div/div[2]/div/div/button").click()
             print("下单中")
             if config["send_email"]:
-                email_config = config["qq_email_config"]
-                send_qq_email(email_config["sender"], email_config["password"], email_config["receiver"])
-            exit(0)
+                try:
+                    email_helper.try_send_email()
+                except:
+                    print("邮件发送失败")
         except:
             print("无法点击创建订单")
