@@ -1,0 +1,10 @@
+{
+    "ccp_cookies": [],
+    "bilibili_cookies": [],
+    "send_email": false,
+    "qq_email_config": {
+        "sender": "",
+        "password": "",
+        "receiver": ""
+    }
+}
