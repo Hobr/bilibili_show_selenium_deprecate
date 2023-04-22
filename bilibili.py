@@ -11,7 +11,7 @@ with open('./config.json', 'r') as f:
 
 # 检查cookie
 if len(config["bilibili_cookies"]) == 0:
-    print("cookies未设置, 是否进行cookies获取？(手动登录后回到终端按任意键,程序将自动获取cookies)")
+    print("cookies未设置, 是否进行cookies获取?(手动登录后回到终端按任意键,程序将自动获取cookies)")
     getcookies = input("输入yes开始获取cookies:")
     if getcookies == "yes":
         WebDriver = webdriver.Edge()
@@ -43,26 +43,26 @@ WebDriver.refresh()
 
 while True:
     time.sleep(random.uniform(1, 3))
-    try:
-        ticket = WebDriver.find_element(By.XPATH, "//*[@id='app']/div[2]/div[2]/div[2]/div[4]/ul[1]/li[2]/div[1]") # 最后一项[]对应票的类型
-        if ticket.get_attribute('class') == 'selectable-option unable':
-            print("无票")
-            raise
-        ticket.click()
-        WebDriver.find_element(By.CLASS_NAME, "product-buy.enable").click()
-    except:
-        print("无法购买")
-        WebDriver.refresh();
-        continue
-
-    try:
-        WebDriver.find_element(By.CLASS_NAME, "check-icon").click()
-        WebDriver.find_element(By.CLASS_NAME, "confirm-paybtn.active").click()
-        print("订单创建完成")
-        if config["send_email"]:
-            email_config = config["qq_email_config"]
-            send_qq_email(email_config["sender"], email_config["password"], email_config["receiver"])
-        exit(0)
-    except:
-        print("无法点击创建订单")
-        continue
+    currurl = WebDriver.current_url
+    if  "show.bilibili.com/platform/detail.html" in currurl:
+        try:
+            ticket = WebDriver.find_element(By.XPATH, "//*[@id='app']/div[2]/div[2]/div[2]/div[4]/ul[1]/li[2]/div[1]") # 最后一项[]对应票的类型
+            ticket.click()
+            if ticket.get_attribute('class') == 'selectable-option unable':
+                print("无票")
+                WebDriver.refresh();
+                continue
+            WebDriver.find_element(By.CLASS_NAME, "product-buy.enable").click()
+        except:
+            print("无法购买")
+            WebDriver.refresh();
+    elif "show.bilibili.com/platform/confirmOrder.html" in currurl:
+        try:
+            WebDriver.find_element(By.CLASS_NAME, "confirm-paybtn.active").click()
+            print("下单中")
+            if config["send_email"]:
+                email_config = config["qq_email_config"]
+                send_qq_email(email_config["sender"], email_config["password"], email_config["receiver"])
+            exit(0)
+        except:
+            print("无法创建订单")
