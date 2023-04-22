@@ -14,7 +14,7 @@ if len(config["bilibili_cookies"]) == 0:
     print("cookies未设置, 是否进行cookies获取?(手动登录后回到终端按任意键,程序将自动获取cookies)")
     getcookies = input("输入yes开始获取cookies:")
     if getcookies == "yes":
-        WebDriver = webdriver.Edge()
+        WebDriver = webdriver.Chrome()
         WebDriver.get("https://show.bilibili.com/platform/detail.html?id=72320")
         print('=============================================')
         input("登录完成后请按任意键继续\n")
@@ -27,7 +27,7 @@ if len(config["bilibili_cookies"]) == 0:
         print("未输入 yes, 程序结束")
         exit(1)
 
-WebDriver = webdriver.Edge()
+WebDriver = webdriver.Chrome()
 WebDriver.get("https://show.bilibili.com/platform/detail.html?id=72320")
 print("进入购票页面成功")
 for cookie in config["bilibili_cookies"]:
@@ -39,10 +39,10 @@ for cookie in config["bilibili_cookies"]:
         'path': cookie['path']
     }
 )
-WebDriver.refresh()
+WebDriver.get("https://show.bilibili.com/platform/detail.html?id=72320")
 
 while True:
-    time.sleep(random.uniform(1, 3))
+    time.sleep(random.uniform(0.1, 1))
     currurl = WebDriver.current_url
     if  "show.bilibili.com/platform/detail.html" in currurl:
         try:
