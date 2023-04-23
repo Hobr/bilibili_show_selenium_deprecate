@@ -32,13 +32,13 @@ WebDriver.get("https://cp.allcpp.cn/#/ticket/detail?event=1074")
 print("进入购票页面成功")
 for cookie in config["ccp_cookies"]:
     WebDriver.add_cookie(
-    {
-        'domain':cookie['domain'],
-        'name': cookie['name'],
-        'value':cookie['value'],
-        'path': cookie['path']
-    }
-)
+        {
+            'domain': cookie['domain'],
+            'name': cookie['name'],
+            'value': cookie['value'],
+            'path': cookie['path']
+        }
+    )
 WebDriver.get("https://cp.allcpp.cn/#/ticket/detail?event=1074")
 
 if config["send_email"]:
@@ -46,22 +46,25 @@ if config["send_email"]:
 while True:
     time.sleep(random.uniform(0.1, 1))
     currurl = WebDriver.current_url
-    if  "cp.allcpp.cn/#/ticket/detail" in currurl:
+    if "cp.allcpp.cn/#/ticket/detail" in currurl:
         try:
-            ticket = WebDriver.find_element(By.XPATH, "//*[@id='root']/div/div[2]/div/div/div[1]/div/div[2]/div[1]/div/div[3]") # 最后一项[]对应票的类型
+            ticket = WebDriver.find_element(
+                By.XPATH, "//*[@id='root']/div/div[2]/div/div/div[1]/div/div[2]/div[1]/div/div[text()='DAY1 普通票']")  # 最后一项[]对应票的类型
             ticket.click()
             if ticket.get_attribute('class') == 'ticket-box disabled':
                 print("无票")
-                WebDriver.refresh();
+                WebDriver.refresh()
                 continue
-            WebDriver.find_element(By.XPATH, "//*[@id='root']/div/div[2]/div/div/div[1]/div/div[2]/div[2]/button").click()
+            WebDriver.find_element(
+                By.XPATH, "//*[@id='root']/div/div[2]/div/div/div[1]/div/div[2]/div[2]/button").click()
         except:
             print("无法购买")
-            WebDriver.refresh();
+            WebDriver.refresh()
     elif "cp.allcpp.cn/#/ticket/confirmOrder" in currurl:
         try:
             WebDriver.find_element(By.CLASS_NAME, "purchaser-info").click()
-            WebDriver.find_element(By.XPATH, "//*[@id='root']/div/div[2]/div/div/button").click()
+            WebDriver.find_element(
+                By.XPATH, "//*[@id='root']/div/div[2]/div/div/button").click()
             print("下单中")
             if config["send_email"]:
                 try:

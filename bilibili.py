@@ -15,7 +15,8 @@ if len(config["bilibili_cookies"]) == 0:
     getcookies = input("输入yes开始获取cookies:")
     if getcookies == "yes":
         WebDriver = webdriver.Chrome()
-        WebDriver.get("https://show.bilibili.com/platform/detail.html?id=72320")
+        WebDriver.get(
+            "https://show.bilibili.com/platform/detail.html?id=72320")
         print('=============================================')
         input("登录完成后请按任意键继续\n")
         config["bilibili_cookies"] = WebDriver.get_cookies()
@@ -32,13 +33,13 @@ WebDriver.get("https://show.bilibili.com/platform/detail.html?id=72320")
 print("进入购票页面成功")
 for cookie in config["bilibili_cookies"]:
     WebDriver.add_cookie(
-    {
-        'domain':cookie['domain'],
-        'name': cookie['name'],
-        'value':cookie['value'],
-        'path': cookie['path']
-    }
-)
+        {
+            'domain': cookie['domain'],
+            'name': cookie['name'],
+            'value': cookie['value'],
+            'path': cookie['path']
+        }
+    )
 WebDriver.get("https://show.bilibili.com/platform/detail.html?id=72320")
 
 if config["send_email"]:
@@ -46,21 +47,23 @@ if config["send_email"]:
 while True:
     time.sleep(random.uniform(0.1, 1))
     currurl = WebDriver.current_url
-    if  "show.bilibili.com/platform/detail.html" in currurl:
+    if "show.bilibili.com/platform/detail.html" in currurl:
         try:
-            ticket = WebDriver.find_element(By.XPATH, "//*[@id='app']/div[2]/div[2]/div[2]/div[4]/ul[1]/li[2]/div[1]") # 最后一项[]对应票的类型
+            ticket = WebDriver.find_element(
+                By.XPATH, "//*[@id='app']/div[2]/div[2]/div[2]/div[4]/ul[1]/li[2]/div[normalize-space()='2023-05-02 周二']")  # 最后一项[]对应票的类型
             ticket.click()
             if ticket.get_attribute('class') == 'selectable-option unable':
                 print("无票")
-                WebDriver.refresh();
+                WebDriver.refresh()
                 continue
             WebDriver.find_element(By.CLASS_NAME, "product-buy.enable").click()
         except:
             print("无法购买")
-            WebDriver.refresh();
+            WebDriver.refresh()
     elif "show.bilibili.com/platform/confirmOrder.html" in currurl:
         try:
-            WebDriver.find_element(By.CLASS_NAME, "confirm-paybtn.active").click()
+            WebDriver.find_element(
+                By.CLASS_NAME, "confirm-paybtn.active").click()
             print("下单中")
             if config["send_email"]:
                 try:
