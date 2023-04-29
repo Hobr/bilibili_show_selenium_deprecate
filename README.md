@@ -1,15 +1,21 @@
-# comicup29-ticket-buy
+# 已弃用
 
-cp29门票购买脚本，支持Bilibili会员购及ALLCPP，修改一下也可以去买别的东西
+新脚本[Bilibili_show_ticket_order](https://github.com/Hobr/Bilibili_show_ticket_order)
 
-脚本不是很完善，只是为了方便购买，在使用时根据自己需求修改，发现问题可以发isssue或者修复发pr，阿里嘎多~
+更高效率,更可靠,仍在开发中
 
-本脚本仅供学习交流使用，不得用于商业用途，如有侵权请联系删除
+## 说明
+
+Bilibili会员购cp29门票购买脚本,适合蹲退票,只能抢一个人的
+
+脚本不是很完善,只是为了方便购买,在使用时根据自己需求修改
+
+本脚本仅供学习交流使用,不得用于商业用途,如有侵权请联系删除
 
 ## 如何使用
 
 1. 下载该项目ZIP文件 <https://github.com/Hobr/comicup29-ticket-buy> （Code->Download ZIP）并解压得到文件夹“comicup29-ticket-buy-main” 双击进入文件夹目录
-2. 安装Python 打开<https://www.python.org/downloads/> ，然后点击黄色按钮下载Python
+2. 安装Python 打开<https://www.python.org/downloads/> ,然后点击黄色按钮下载Python
 3. 安装时选中“Add Python to PATH”紧接着点击“Customize installation”确保勾选所有可选项后 “Next”
 4. 打开终端（Cmd或者Powershell）输入命令 pip config set global.index-url <https://mirrors.ustc.edu.cn/pypi/web/simple> & pip install -r requirements.txt
 5. 检查您使用的浏览器版本 （打开设置->关于来检查您的浏览器版本）
@@ -25,8 +31,3 @@ cp29门票购买脚本，支持Bilibili会员购及ALLCPP，修改一下也可�
 10. 改完后 在刚刚打开的cmd窗口内输入指令python .\bilibili.py或者python .\cpp.py
 11. 根据要求输入yes 在网页登陆完成后 回到cmd输入任意字符 回车 成功获取Cookies
 12. 再次输入指令python .\bilibili.py或者python .\cpp.py 即可开始抢票
-
-## 补充
-
-1. 可以通过设置“config.json”文件中的"send_email": <false/true>,来选择是否启用发送QQ邮件功能
-2. 默认是购买Day1普票 可以修改“.py”文件中的'2023-05-02 周二'或'DAY1 普通票'
