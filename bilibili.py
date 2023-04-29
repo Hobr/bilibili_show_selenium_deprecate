@@ -1,74 +1,101 @@
 from selenium.webdriver.common.by import By
 from selenium import webdriver
-from utils import EmailHelper
 import json
 import random
 import time
 
-# 加载配置文件
-with open('./config.json', 'r') as f:
+day1Token = "cAARqAAAHu6gEAAQAFz_g."
+day2Token = "cAARqAAAHu6wEAAQAF0Ag."
+
+# 配置载入
+with open("./config.json", "r") as f:
     config = json.load(f)
 
-# 检查cookie
-if len(config["bilibili_cookies"]) == 0:
-    print("cookies未设置, 是否进行cookies获取?(手动登录后回到终端按任意键,程序将自动获取cookies)")
-    getcookies = input("输入yes开始获取cookies:")
-    if getcookies == "yes":
-        WebDriver = webdriver.Chrome()
-        WebDriver.get(
-            "https://show.bilibili.com/platform/detail.html?id=72320")
-        print('=============================================')
-        input("登录完成后请按任意键继续\n")
-        config["bilibili_cookies"] = WebDriver.get_cookies()
-        with open('./config.json', 'w') as f:
-            json.dump(config, f, indent=4)
-        print("cookies 保存好啦,在运行一次脚本吧")
-        exit(0)
-    else:
-        print("未输入 yes, 程序结束")
-        exit(1)
+# 初始化
+if config["init"] == 0:
+    print("第一次使用需要配置一下!\n")
+    WebDriver = webdriver.Chrome()
+    WebDriver.get(config["studyUrl"])
+    print("首先请动手登录一下B站\n")
+    WebDriver.find_element(By.CLASS_NAME, "nav-header-register").click()
+    input("登录完成后请按任意键继续\n")
+    config["cookie"] = WebDriver.get_cookies()
+    print("cookie已保存")
+    WebDriver.quit()
+    config["day"] = int(input("你想抢Day几的票?只输入数字1或2!\n"))
+    config["init"] = 1
+    with open("./config.json", "w") as f:
+        json.dump(config, f, indent=4)
 
+# WebDriver初始化
 WebDriver = webdriver.Chrome()
-WebDriver.get("https://show.bilibili.com/platform/detail.html?id=72320")
-print("进入购票页面成功")
-for cookie in config["bilibili_cookies"]:
-    WebDriver.add_cookie(
-        {
-            'domain': cookie['domain'],
-            'name': cookie['name'],
-            'value': cookie['value'],
-            'path': cookie['path']
-        }
-    )
-WebDriver.get("https://show.bilibili.com/platform/detail.html?id=72320")
+WebDriver.get(config["studyUrl"])
 
-if config["send_email"]:
-    email_helper = EmailHelper(config["qq_email_config"])
+# 载入Cookie
+for cookie in config["cookie"]:
+    WebDriver.add_cookie({
+        "domain": cookie["domain"],
+        "name": cookie["name"],
+        "value": cookie["value"],
+        "path": cookie["path"]
+    })
+
+if config["day"] == 1:
+    afterToken = day1Token
+elif config["day"] == 2:
+    afterToken = day2Token
+
+# 时间戳获取
+if len(config["currentToken"]) == 0:
+    print("获取时间戳中")
+    WebDriver.get(config["studyUrl"])
+    WebDriver.find_element(By.CLASS_NAME, "product-buy.enable").click()
+    time.sleep(3)
+    config["currentToken"] = WebDriver.current_url[59:65]
+    config["actualUrl"] = "https://show.bilibili.com/platform/confirmOrder.html?token=" + \
+        config["currentToken"] + afterToken
+    with open("./config.json", "w") as f:
+        json.dump(config, f, indent=4)
+
+# 下单页面
+config["actualUrl"] = "https://show.bilibili.com/platform/confirmOrder.html?token=" + \
+    config["currentToken"] + afterToken
+WebDriver.get(config["actualUrl"])
+
+# 持续下单
 while True:
-    time.sleep(random.uniform(0.1, 1))
-    currurl = WebDriver.current_url
-    if "show.bilibili.com/platform/detail.html" in currurl:
+    time.sleep(random.uniform(0.6, 1.2))
+    try:
         try:
-            ticket = WebDriver.find_element(
-                By.XPATH, "//*[@id='app']/div[2]/div[2]/div[2]/div[4]/ul[1]/li[2]/div[normalize-space()='2023-05-02 周二']")  # 最后一项[]对应票的类型
-            ticket.click()
-            if ticket.get_attribute('class') == 'selectable-option unable':
-                print("无票")
-                WebDriver.refresh()
-                continue
-            WebDriver.find_element(By.CLASS_NAME, "product-buy.enable").click()
-        except:
-            print("无法购买")
-            WebDriver.refresh()
-    elif "show.bilibili.com/platform/confirmOrder.html" in currurl:
+            WebDriver.find_element(By.CLASS_NAME,
+                                   "confirm-paybtn.active").click()
+            print("运行中")
+        except BaseException:
+            if WebDriver.find_element(
+                    By.XPATH,
+                    "//*[@id='app']/div[2]/div/div[5]/div/div[2]/div/div[2]/div"
+            ).text == "当前页面已失效，请返回详情页重新下单":
+                print("时间戳已过期,获取时间戳中")
+                WebDriver.get(config["studyUrl"])
+                WebDriver.find_element(By.CLASS_NAME,
+                                       "product-buy.enable").click()
+                time.sleep(3)
+                config["currentToken"] = WebDriver.current_url[59:65]
+                config["actualUrl"] = "https://show.bilibili.com/platform/confirmOrder.html?token=" + \
+                    config["currentToken"] + afterToken
+                WebDriver.get(config["actualUrl"])
+                with open("./config.json", "w") as f:
+                    json.dump(config, f, indent=4)
+    except Exception as e:
         try:
-            WebDriver.find_element(
-                By.CLASS_NAME, "confirm-paybtn.active").click()
-            print("下单中")
-            if config["send_email"]:
-                try:
-                    email_helper.try_send_email()
-                except:
-                    print("邮件发送失败")
-        except:
+            if WebDriver.find_element(
+                    By.XPATH,
+                    "//*[@id='app']/div[2]/div/div[7]/div/h1").text == "扫码支付":
+                print("已下单,请手动支付")
+                WebDriver.quit()
+                exit(0)
+        except BaseException:
+            print(e)
+            WebDriver.find_element(By.CLASS_NAME, "check-icon").click()
             print("无法创建订单")
+            WebDriver.refresh()

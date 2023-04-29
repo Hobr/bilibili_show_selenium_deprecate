@@ -1,10 +1,8 @@
 {
-    "ccp_cookies": [],
-    "bilibili_cookies": [],
-    "send_email": false,
-    "qq_email_config": {
-        "sender": "",
-        "password": "",
-        "receiver": ""
-    }
+    "init": 0,
+    "day": 0,
+    "studyUrl": "https://show.bilibili.com/platform/detail.html?id=70163",
+    "currentToken": "",
+    "actualUrl": "",
+    "cookie": []
 }
