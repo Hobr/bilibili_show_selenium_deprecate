@@ -64,7 +64,7 @@ WebDriver.get(config["actualUrl"])
 
 # 持续下单
 while True:
-    time.sleep(random.uniform(0.6, 1.2))
+    time.sleep(random.uniform(1, 3))
     try:
         try:
             WebDriver.find_element(By.CLASS_NAME,
