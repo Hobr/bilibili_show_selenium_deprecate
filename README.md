@@ -1,8 +1,8 @@
 # 已弃用
 
-新脚本[Bilibili_show_ticket_order](https://github.com/Hobr/Bilibili_show_ticket_order)
+本repo不会再进行更新
 
-更高效率,更可靠,仍在开发中
+新脚本[Bilibili_show_ticket_order](https://github.com/Hobr/Bilibili_show_ticket_order)，更高效率,更可靠,仍在开发中
 
 ## 说明
 
@@ -11,6 +11,11 @@ Bilibili会员购cp29门票购买脚本,适合蹲退票,只能抢一个人的
 脚本不是很完善,只是为了方便购买,在使用时根据自己需求修改
 
 本脚本仅供学习交流使用,不得用于商业用途,如有侵权请联系删除
+
+## 已发现的问题及解决方法
+
+1. 无限显示小电视，哪怕刷新后也是：这种是点击频率过快被banip了，大概要二三十分钟时间解封，在此之前想办法换ip，例如开代理，用流量
+2. 验证已过期，请返回详情页重新下单：详见<https://github.com/Hobr/cp_deprecate/blob/main/解决验证问题的方法.pdf>
 
 ## 如何使用
 
