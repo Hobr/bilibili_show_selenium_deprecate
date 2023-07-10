@@ -1,8 +1,6 @@
 # 已弃用
 
-本repo不会再进行更新
-
-新脚本[Bilibili_show_ticket_order](https://github.com/Hobr/Bilibili_show_ticket_order)，更高效率,更可靠,仍在开发中
+左转[fengx1a0/Bilibili_show_ticket_auto_order](https://github.com/fengx1a0/Bilibili_show_ticket_auto_order)
 
 ## 说明
 
