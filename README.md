@@ -1,6 +1,6 @@
 # 已弃用
 
-左转[fengx1a0/Bilibili_show_ticket_auto_order](https://github.com/fengx1a0/Bilibili_show_ticket_auto_order)
+左转[Just-Prog/Bilibili_show_ticket_auto_order](https://github.com/Just-Prog/Bilibili_show_ticket_auto_order)
 
 ## 说明
 
