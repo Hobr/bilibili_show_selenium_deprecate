@@ -11,7 +11,7 @@ distlib==0.3.6
 exceptiongroup==1.1.1
 filelock==3.12.0
 flake8==6.0.0
-h11==0.14.0
+h11==0.16.0
 identify==2.5.22
 idna==3.7
 isort==5.12.0
